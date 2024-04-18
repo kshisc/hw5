@@ -11,18 +11,73 @@
 #include "dict-eng.h"
 using namespace std;
 
+//example input: -i-- dn
 
 // Add prototypes of helper functions here
+void wordleHelper(
+	string s,
+	const string& floating,
+	size_t x,
+	const set<string>& dict,
+	set<string>& words);
 
 
 // Definition of primary wordle function
-std::set<std::string> wordle(
-    const std::string& in,
-    const std::string& floating,
-    const std::set<std::string>& dict)
+set<string> wordle(
+    const string& in,
+    const string& floating,
+    const set<string>& dict)
 {
-    // Add your code here
+    set<string> words;
+		if(in.empty()){ //null case
+			return words;
+		}
 
+		string s=in; //copy
+
+		wordleHelper(s,floating,0,dict,words);
+		return words;
 }
 
 // Define any helper functions here
+void wordleHelper(
+	string s,
+	const string& floating,
+	size_t x,
+	const set<string>& dict,
+	set<string>& words)
+{
+	//no more floating letters
+	if(floating.empty()){
+		while(x!=s.size() && s[x]!='-'){
+			x++;
+		}
+	
+		if(x==s.size()){ //end of word
+			if(dict.find(s)!=dict.end()){ //valid word
+				words.insert(s);
+			}
+			return;
+		}
+
+		else{
+			for(size_t i=0; i<26; i++){ //fill remaining with alphabet
+					string newS = s; //copy
+					newS[x]='a'+i;
+					wordleHelper(newS,floating,x+1,dict,words);
+			}
+		}
+		return;
+	}
+	
+	//more floating letters
+	string newF = floating.substr(0,floating.size()-1);
+	for(size_t i=0; i<s.size(); i++){
+		if(s[i]=='-'){
+			string newS = s;
+			newS[i]=floating[floating.size()-1];
+			wordleHelper(newS,newF,0,dict,words);
+		}
+	}
+}
+
