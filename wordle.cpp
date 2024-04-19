@@ -19,7 +19,7 @@ void wordleHelper(
 	const string& floating,
 	size_t x,
 	const set<string>& dict,
-	set<string>& words);
+	set<string>& words); 
 
 
 // Definition of primary wordle function
@@ -40,16 +40,16 @@ set<string> wordle(
 }
 
 // Define any helper functions here
-void wordleHelper(
+void wordleHelper( //1 letter recursion
 	string s,
 	const string& floating,
-	size_t x,
+	size_t x, //index
 	const set<string>& dict,
 	set<string>& words)
 {
 	//no more floating letters
 	if(floating.empty()){
-		while(x!=s.size() && s[x]!='-'){
+		while(x!=s.size() && s[x]!='-'){ //find next dash
 			x++;
 		}
 	
@@ -74,7 +74,7 @@ void wordleHelper(
 	string newF = floating.substr(0,floating.size()-1);
 	for(size_t i=0; i<s.size(); i++){
 		if(s[i]=='-'){
-			string newS = s;
+			string newS = s; //copy
 			newS[i]=floating[floating.size()-1];
 			wordleHelper(newS,newF,0,dict,words);
 		}
